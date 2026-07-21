@@ -1,4 +1,3 @@
-
 import time
 
 import requests
@@ -8,6 +7,7 @@ BASE_URL = "https://leetcode-api-pied.vercel.app"
 
 
 def _get_with_retry(url, params=None, timeout=20, retries=2, backoff_seconds=2):
+    
     last_error = None
     for attempt in range(retries + 1):
         try:
@@ -51,6 +51,7 @@ def get_solved_stats(username):
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_skill_stats(username):
+
     response = _get_with_retry(f"{BASE_URL}/user/{username}/skills")
     if response is None:
         return None
@@ -62,7 +63,7 @@ def get_skill_stats(username):
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_recent_ac_submissions(username, limit=1000):
-
+  
     response = _get_with_retry(f"{BASE_URL}/user/{username}/solved")
     if response is None:
         return None
@@ -74,6 +75,7 @@ def get_recent_ac_submissions(username, limit=1000):
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_problems_by_tag(tag_slug, limit=40, skip=0):
+   
     response = _get_with_retry(
         f"{BASE_URL}/problems/tag/{tag_slug}",
         params={"limit": limit, "skip": skip},
