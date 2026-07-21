@@ -1,24 +1,3 @@
-"""
-theme.py
-
-Two separate concerns split into two separate places, on purpose:
-
-1. .streamlit/config.toml sets STREAMLIT'S OWN base theme (background,
-   text, primary color). That's the file that actually decides whether
-   the app looks intentionally dark or like white-background-with-
-   invisible-white-text, depending on the viewer's default theme - it
-   was missing entirely before this pass.
-2. inject_custom_css() below adds the polish config.toml can't reach:
-   a real font instead of the browser default, tighter/consistent
-   spacing, subtle hover states on cards, and a nicer score panel.
-   Called once at the top of main().
-
-Nothing here is required for the app to function - if this import or
-call ever fails for some reason, the dashboard still works, just
-plainer. Keep it that way; a cosmetic layer should never be able to
-break the actual data pipeline.
-"""
-
 import streamlit as st
 
 from colors import CARD_BG_COLOR
