@@ -5,7 +5,7 @@ MIN_POINTS_FOR_FORECAST = 3
 
 
 def forecast_metric(history_df, value_column="readiness_score", days_ahead=30, clip_range=None):
-
+  
     if history_df is None or len(history_df) < MIN_POINTS_FOR_FORECAST:
         return None
 
@@ -14,6 +14,7 @@ def forecast_metric(history_df, value_column="readiness_score", days_ahead=30, c
     values = history_df[value_column].to_numpy(dtype=float)
 
     if len(set(day_numbers)) < 2:
+       
         return None
 
     slope, intercept = np.polyfit(day_numbers, values, 1)
