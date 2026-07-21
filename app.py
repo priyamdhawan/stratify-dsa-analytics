@@ -1,7 +1,3 @@
-"""
-app.py (FINAL VERSION: Stratify Analytics)
-"""
-
 import concurrent.futures
 
 import streamlit as st
@@ -21,7 +17,6 @@ from behavior import analyze_learning_behavior
 from theme import inject_custom_css
 
 def main():
-    # --- 1. NEW BRANDING ---
     st.set_page_config(page_title="Stratify | DSA Analytics", layout="wide")
     inject_custom_css()  # dark theme lives in .streamlit/config.toml; this adds font/spacing/hover polish
 
@@ -29,9 +24,6 @@ def main():
     st.markdown("Pulls your real LeetCode data and tells you exactly what to practice next.")
     st.markdown("---")
 
-    # ==========================================
-    # SIDEBAR
-    # ==========================================
     st.sidebar.markdown("### Enter your LeetCode profile")
     username = st.sidebar.text_input(
         "LeetCode Username", placeholder="e.g., neetcode", autocomplete="username"
@@ -44,10 +36,6 @@ def main():
 
     st.sidebar.caption("Data is pulled automatically from your public LeetCode profile.")
 
-    # ==========================================
-    # GATE: BEAUTIFUL LANDING PAGE
-    # ==========================================
-    # FIX: Wrap the landing page in a placeholder so we can instantly delete it!
     landing_placeholder = st.empty()
     
     if not username:
@@ -79,12 +67,9 @@ def main():
             
         st.stop()
         
-    # INSTANT WIPE: If username is entered, this runs instantly and deletes the faded ghost page!
     landing_placeholder.empty()
 
-    # ==========================================
-    # FETCH REAL DATA
-    # ==========================================
+
     with st.spinner("Fetching your LeetCode stats..."):
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             future_solved = executor.submit(get_solved_stats, username)
@@ -99,9 +84,6 @@ def main():
         )
         st.stop()
 
-    # ==========================================
-    # BUILD REAL DATAFRAME
-    # ==========================================
     df = build_dataframe_from_api(skill_data)
     df = cluster_patterns(df)
 
@@ -111,9 +93,7 @@ def main():
     hard = solved_data.get("hardSolved", 0)
     score = calculate_readiness_score(df, leetcode_total)
 
-    # ==========================================
-    # LOG TODAY'S REAL SNAPSHOT
-    # ==========================================
+    
     history_store.log_snapshot(
         username=username,
         total_solved=leetcode_total,
@@ -123,9 +103,7 @@ def main():
         readiness_score=score,
     )
 
-    # ==========================================
-    # TABS
-    # ==========================================
+
     tab1, tab2, tab3, tab4 = st.tabs(
         ["Overview & Bias", "Pattern Analytics", "Strategic Revision Plan", "Progress & Behavior"]
     )
@@ -293,10 +271,6 @@ def main():
                 "this needs actual history, not a simulation."
             )
         else:
-            # --- PRIMARY: total problems solved ---
-            # This is the one that should actually move day to day - it's
-            # a straight count, not a capped composite, so 2-3 solves
-            # today show up as 2-3 more tomorrow. No flat line.
             st.markdown("##### Total Problems Solved")
             fig_solved = px.line(history_df, x="snapshot_date", y="total_solved", markers=True)
             fig_solved.update_traces(line_color=ACCENT_BLUE, marker=dict(size=8))
@@ -330,14 +304,6 @@ def main():
             st.markdown("<br>", unsafe_allow_html=True)
             st.divider()
 
-            # --- SECONDARY: readiness score ---
-            # Deliberately smaller and lower-emphasis: this is a capped
-            # composite averaged across every one of your tags, so it
-            # moves slowly BY DESIGN - a few solves in one tag barely
-            # shift the average across 15-20 of them. That's not a bug
-            # or a sign you're not making progress; it's just the wrong
-            # metric to check day-to-day. Use it to check direction over
-            # weeks, use Total Solved above for daily motivation.
             st.markdown("##### Readiness Score (moves slowly on purpose)")
             st.caption(
                 "This is an average across ALL your patterns, capped 0-100 - a couple of "
