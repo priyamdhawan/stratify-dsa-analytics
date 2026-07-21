@@ -3,10 +3,11 @@ import re
 from leetcode_api import get_problems_by_tag, get_recent_ac_submissions
 
 MAX_PROBLEMS_PER_PATTERN = 4
-MAX_PATTERNS_IN_PLAN = 6 
+MAX_PATTERNS_IN_PLAN = 6
 FETCH_POOL_SIZE = 40
 
 DIFFICULTY_ORDER = {"EASY": 0, "MEDIUM": 1, "HARD": 2}
+
 
 HIGH_YIELD_TAGS = {
     "array", "string", "hash table", "two pointers", "sliding window",
@@ -58,7 +59,7 @@ def _diagnose(solved, confidence):
 
 
 def _extract_solved_slugs(ac_submissions_json):
-
+  
     solved = set()
     if not ac_submissions_json:
         return solved
@@ -112,6 +113,7 @@ def _extract_problem_list(problems_json):
 
 
 def _recommend_problems_for_tag(tag_slug, solved_slugs):
+   
     raw = get_problems_by_tag(tag_slug, limit=FETCH_POOL_SIZE)
     candidates = _extract_problem_list(raw)
 
@@ -143,7 +145,7 @@ def generate_plan(df, username):
         pattern = row["pattern"]
         solved = int(row["problems_solved"])
         confidence = int(row["confidence"])
-
+      
         tag_slug = row.get("tag_slug") or slugify_tag(pattern)
 
         plan.append({
