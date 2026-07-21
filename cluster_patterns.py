@@ -7,7 +7,7 @@ MIN_ROWS_FOR_KMEANS = 3
 
 
 def _fallback_tier(confidence):
-    
+
     if confidence <= 2:
         return "Weak"
     elif confidence == 3:
@@ -25,7 +25,7 @@ def cluster_patterns(df):
         return df
 
     if len(df) < MIN_ROWS_FOR_KMEANS:
-        
+ 
         df["cluster"] = -1
         df["tier"] = df["confidence"].apply(_fallback_tier)
         return df
