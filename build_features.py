@@ -1,20 +1,8 @@
-"""
-build_features.py (REWRITTEN v3 - Stricter Confidence Thresholds)
-
-Fix applied: The previous version gave a 5/5 confidence rating for solving 
-just 10 problems in a tag. This heavily inflated the Readiness Score. 
-The new thresholds are much stricter and more realistic for interview prep.
-"""
-
 import pandas as pd
 
 
 def parse_skill_data(skill_json):
-    """
-    Flattens the raw skill API response into a list of
-    {tag_name, group, problems_solved} - one entry per REAL tag LeetCode
-    has skill data for on this profile.
-    """
+
     tags = []
     if not skill_json or not isinstance(skill_json, dict):
         return tags
@@ -38,15 +26,6 @@ def parse_skill_data(skill_json):
 
 
 def build_dataframe_from_api(skill_json):
-    """
-    Builds the pattern DataFrame using REAL solved counts per REAL LeetCode tag.
-    Confidence is derived from solve count using STRICT interview-ready thresholds:
-        0 solved    -> 1 (Cold)
-        1-4 solved  -> 2 (Beginner)
-        5-14 solved -> 3 (Moderate - knows basics)
-        15-29 solved-> 4 (Strong - recognizes patterns)
-        30+ solved  -> 5 (Mastery)
-    """
     tags = parse_skill_data(skill_json)
 
     rows = []
@@ -67,7 +46,7 @@ def build_dataframe_from_api(skill_json):
 
         rows.append({
             "pattern": t["tag_name"],
-            "tag_slug": t.get("tag_slug"),  # real slug from the API, may be None for old test fixtures
+            "tag_slug": t.get("tag_slug"), 
             "group": t["group"],  
             "problems_solved": solved,
             "confidence": confidence,
