@@ -1,3 +1,5 @@
+
+
 TIER_COLORS = {
     "Weak": "#EF4444",      # red
     "Moderate": "#F59E0B",  # amber
@@ -9,6 +11,7 @@ TIER_BG = {
     "Moderate": "rgba(245, 158, 11, 0.1)",
     "Strong": "rgba(16, 185, 129, 0.1)",
 }
+
 
 DIFFICULTY_COLORS = {
     "EASY": TIER_COLORS["Strong"],
