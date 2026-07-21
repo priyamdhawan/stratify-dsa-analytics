@@ -1,28 +1,12 @@
-"""
-behavior.py
-
-Reads your real accepted-submission timestamps (from
-leetcode_api.get_recent_ac_submissions) and describes your solving
-cadence over the last window_days. This is explicitly RULE-BASED date
-math on real data - not a trained classifier - and it's labeled that
-way in the UI on purpose rather than dressed up as "AI".
-"""
-
 from datetime import datetime, timedelta, timezone
 
 WINDOW_DAYS = 30
-CONSISTENT_ACTIVE_DAY_RATIO = 0.35  # active on >=35% of days in the window
-BUSTY_GAP_DAYS = 10                 # a gap this long inside the window signals "bursty"
+CONSISTENT_ACTIVE_DAY_RATIO = 0.35  
+BUSTY_GAP_DAYS = 10                 
 
 
 def _extract_timestamps(ac_submissions_json):
-    """
-    Pulls submission timestamps (as UTC datetimes) out of the
-    acSubmission response. Defensive about field names/shape - same
-    caveat as elsewhere in this codebase: confirm against the live
-    response with leetcode_api.debug_print_ac_submission_shape() and
-    adjust the key lookups below if your account's shape differs.
-    """
+
     timestamps = []
     if not ac_submissions_json:
         return timestamps
@@ -43,7 +27,7 @@ def _extract_timestamps(ac_submissions_json):
             if raw_ts is None:
                 continue
             try:
-                # LeetCode timestamps are typically Unix seconds, sometimes as strings
+            
                 ts = datetime.fromtimestamp(int(raw_ts), tz=timezone.utc)
                 timestamps.append(ts)
             except (ValueError, TypeError, OSError):
@@ -52,10 +36,7 @@ def _extract_timestamps(ac_submissions_json):
 
 
 def analyze_learning_behavior(ac_submissions_json, window_days=WINDOW_DAYS):
-    """
-    Returns a dict describing your real solving cadence, honestly:
-      {"label": str, "detail": str, "active_days": int, "longest_gap_days": int|None}
-    """
+
     timestamps = _extract_timestamps(ac_submissions_json)
     if len(timestamps) < 3:
         return {
