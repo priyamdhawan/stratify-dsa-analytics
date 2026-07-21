@@ -2,7 +2,6 @@ import pandas as pd
 
 
 def parse_skill_data(skill_json):
-
     tags = []
     if not skill_json or not isinstance(skill_json, dict):
         return tags
@@ -13,7 +12,7 @@ def parse_skill_data(skill_json):
             continue
         for entry in entries:
             tag_name = entry.get("tagName")
-            tag_slug = entry.get("tagSlug")  # real slug from the API, when available
+            tag_slug = entry.get("tagSlug")
             solved = entry.get("problemsSolved", 0)
             if tag_name:
                 tags.append({
@@ -26,13 +25,13 @@ def parse_skill_data(skill_json):
 
 
 def build_dataframe_from_api(skill_json):
+
     tags = parse_skill_data(skill_json)
 
     rows = []
     for t in tags:
         solved = t["problems_solved"]
         
-        # STRICTER THRESHOLDS APPLIED HERE
         if solved == 0:
             confidence = 1
         elif solved <= 4:
