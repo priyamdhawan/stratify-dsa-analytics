@@ -13,6 +13,7 @@ def calculate_readiness_score(df, leetcode_total_solved):
 
     pattern_score = (avg_confidence / 5) * 60
 
+   
     try:
         volume_score = min(float(leetcode_total_solved) / 200, 1.0) * 40
     except (TypeError, ValueError):
@@ -24,5 +25,5 @@ def calculate_readiness_score(df, leetcode_total_solved):
 if __name__ == "__main__":
     from build_features import build_dataframe
     df = build_dataframe()
-    score = calculate_readiness_score(df, leetcode_total_solved=115)
+    score = calculate_readiness_score(df, leetcode_total_solved=115) 
     print(f"Readiness Score: {score}/100")
