@@ -1,3 +1,4 @@
+
 import concurrent.futures
 
 import streamlit as st
@@ -17,13 +18,15 @@ from behavior import analyze_learning_behavior
 from theme import inject_custom_css
 
 def main():
+    
     st.set_page_config(page_title="Stratify | DSA Analytics", layout="wide")
-    inject_custom_css()  # dark theme lives in .streamlit/config.toml; this adds font/spacing/hover polish
+    inject_custom_css() 
 
     st.title("Stratify")
     st.markdown("Pulls your real LeetCode data and tells you exactly what to practice next.")
     st.markdown("---")
 
+  
     st.sidebar.markdown("### Enter your LeetCode profile")
     username = st.sidebar.text_input(
         "LeetCode Username", placeholder="e.g., neetcode", autocomplete="username"
@@ -36,6 +39,7 @@ def main():
 
     st.sidebar.caption("Data is pulled automatically from your public LeetCode profile.")
 
+ 
     landing_placeholder = st.empty()
     
     if not username:
@@ -67,6 +71,7 @@ def main():
             
         st.stop()
         
+
     landing_placeholder.empty()
 
 
@@ -84,6 +89,7 @@ def main():
         )
         st.stop()
 
+
     df = build_dataframe_from_api(skill_data)
     df = cluster_patterns(df)
 
@@ -93,7 +99,7 @@ def main():
     hard = solved_data.get("hardSolved", 0)
     score = calculate_readiness_score(df, leetcode_total)
 
-    
+
     history_store.log_snapshot(
         username=username,
         total_solved=leetcode_total,
@@ -271,6 +277,7 @@ def main():
                 "this needs actual history, not a simulation."
             )
         else:
+          
             st.markdown("##### Total Problems Solved")
             fig_solved = px.line(history_df, x="snapshot_date", y="total_solved", markers=True)
             fig_solved.update_traces(line_color=ACCENT_BLUE, marker=dict(size=8))
@@ -304,6 +311,7 @@ def main():
             st.markdown("<br>", unsafe_allow_html=True)
             st.divider()
 
+            
             st.markdown("##### Readiness Score (moves slowly on purpose)")
             st.caption(
                 "This is an average across ALL your patterns, capped 0-100 - a couple of "
