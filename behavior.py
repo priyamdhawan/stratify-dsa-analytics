@@ -6,7 +6,7 @@ BUSTY_GAP_DAYS = 10
 
 
 def _extract_timestamps(ac_submissions_json):
-
+   
     timestamps = []
     if not ac_submissions_json:
         return timestamps
@@ -27,7 +27,6 @@ def _extract_timestamps(ac_submissions_json):
             if raw_ts is None:
                 continue
             try:
-            
                 ts = datetime.fromtimestamp(int(raw_ts), tz=timezone.utc)
                 timestamps.append(ts)
             except (ValueError, TypeError, OSError):
@@ -36,7 +35,7 @@ def _extract_timestamps(ac_submissions_json):
 
 
 def analyze_learning_behavior(ac_submissions_json, window_days=WINDOW_DAYS):
-
+    
     timestamps = _extract_timestamps(ac_submissions_json)
     if len(timestamps) < 3:
         return {
